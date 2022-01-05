@@ -2,6 +2,7 @@ package com.github.quillraven.darkmatter.screen
 
 import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.I18NBundle
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.quillraven.darkmatter.Game
 import com.github.quillraven.darkmatter.asset.I18NBundleAsset
@@ -30,7 +31,7 @@ abstract class Screen(
     val engine: Engine = game.engine
     val gameEventManager: GameEventManager = game.gameEventManager
     val assets: AssetStorage = game.assets
-    val bundle = assets[I18NBundleAsset.DEFAULT.descriptor]
+    val bundle: I18NBundle = assets[I18NBundleAsset.DEFAULT.descriptor]
 
     override fun show() {
         LOG.debug { "Show ${this::class.simpleName}" }

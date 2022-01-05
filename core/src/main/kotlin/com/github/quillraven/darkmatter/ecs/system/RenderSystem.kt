@@ -104,7 +104,7 @@ class RenderSystem(
     }
 
     private fun renderPlayerOutlines(entity: Entity, it: Batch) {
-        val player = entity[PlayerComponent.mapper]
+        val player : PlayerComponent? = entity[PlayerComponent.mapper]
         require(player != null) { "Entity |entity| must have a PlayerComponent. entity=$entity" }
 
         if (player.shield > 0f) {
@@ -127,7 +127,7 @@ class RenderSystem(
                     backgroundScrollSpeed.y + deltaTime * (1f / TIME_TO_RESET_BGD_SCROLL_SPEED)
                 )
                 scroll(deltaTime * backgroundScrollSpeed.x, deltaTime * backgroundScrollSpeed.y)
-                draw(batch)
+                draw(it)
             }
         }
     }

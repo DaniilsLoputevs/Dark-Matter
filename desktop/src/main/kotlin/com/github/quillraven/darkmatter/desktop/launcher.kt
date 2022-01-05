@@ -10,7 +10,7 @@ fun main() {
         Lwjgl3ApplicationConfiguration().apply {
             setTitle("Dark Matter")
             setWindowSizeLimits(360, 640, -1, -1)
-            setWindowedMode(360, 640)
+            setWindowedMode(360, 640) // 16 : 9
             setWindowIcon("icon.png")
         })
 }

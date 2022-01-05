@@ -28,7 +28,7 @@ class DebugSystem(
     private val audioService: AudioService
 ) : IntervalIteratingSystem(allOf(PlayerComponent::class).get(), WINDOW_INFO_UPDATE_INTERVAL) {
     init {
-        setProcessing(false)
+        setProcessing(true)
     }
 
     override fun processEntity(entity: Entity) {

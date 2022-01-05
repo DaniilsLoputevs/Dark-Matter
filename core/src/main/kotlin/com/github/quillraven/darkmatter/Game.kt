@@ -1,5 +1,6 @@
 package com.github.quillraven.darkmatter
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
@@ -61,7 +62,7 @@ class Game : KtxGame<KtxScreen>() {
     }
     val gameEventManager by lazy { GameEventManager() }
     val audioService by lazy { DefaultAudioService(assets) }
-    val engine by lazy {
+    val engine: Engine by lazy {
         PooledEngine().apply {
             val atlas = assets[TextureAtlasAsset.GRAPHICS.descriptor]
 
@@ -83,10 +84,21 @@ class Game : KtxGame<KtxScreen>() {
                     setProcessing(false)
                 }
             )
-            addSystem(AttachSystem())
-            addSystem(AnimationSystem(atlas))
+
+            println("TEST")
+            println("TextureAtlasAsset")
+            println(TextureAtlasAsset.values())
+            println("descriptort")
+            println(TextureAtlasAsset.GRAPHICS.descriptor)
+            println("assets")
+            println(assets)
+            println("TEST")
+
+
+            println(AttachSystem())
+            println(AnimationSystem(atlas))
             addSystem(CameraShakeSystem(gameViewport.camera, gameEventManager))
-            addSystem(PlayerColorSystem(gameEventManager))
+            println(PlayerColorSystem(gameEventManager))
             addSystem(
                 RenderSystem(
                     stage,
@@ -96,13 +108,16 @@ class Game : KtxGame<KtxScreen>() {
                     assets[TextureAsset.BACKGROUND.descriptor]
                 )
             )
-            addSystem(RemoveSystem(gameEventManager))
+            println(RemoveSystem(gameEventManager))
         }
     }
     val preferences: Preferences by lazy { Gdx.app.getPreferences("dark-matter") }
-    private val profiler by lazy { GLProfiler(Gdx.graphics) }
+    private val profiler: GLProfiler by lazy { GLProfiler(Gdx.graphics) }
 
     override fun create() {
+        println("GAME :: create()")
+        var isAssertLoadingFinish = false
+
         Gdx.app.logLevel = Application.LOG_ERROR
         profiler.enable()
 
@@ -114,16 +129,33 @@ class Game : KtxGame<KtxScreen>() {
             I18NBundleAsset.values().map { assets.loadAsync(it.descriptor) }
         ).flatten()
         KtxAsync.launch {
+            println("coroutines start")
             assetRefs.joinAll()
+            println("coroutines join end")
             // skin assets loaded -> create skin
             LOG.debug { "It took ${(System.currentTimeMillis() - old) * 0.001f} seconds to load skin assets" }
             old = System.currentTimeMillis()
             createSkin(assets)
             LOG.debug { "It took ${(System.currentTimeMillis() - old) * 0.001f} seconds to create the skin" }
+            isAssertLoadingFinish = true
             // go to LoadingScreen to load remaining assets
             addScreen(LoadingScreen(this@Game))
             setScreen<LoadingScreen>()
         }
+
+
+//        println("is load finish: $isAssertLoadingFinish")
+//        println("assets.progress.isFinished: ${assets.progress.isFinished}")
+//        println("assets.progress.isFailed: ${assets.progress.isFailed}")
+////        println("assets.progress.percent: ${assets.progress.percent}")
+//        println("assets.progress.total: ${assets.progress.total}")
+//        while (!assets.progress.isFinished) {
+////            println("in while")
+////            println("assets.progress.percent: ${assets.progress.percent}")
+//            if (isAssertLoadingFinish) break
+//        }
+
+//        while(true);
     }
 
     override fun render() {
